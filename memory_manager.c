@@ -47,27 +47,28 @@ char define_datatype() {
 int main() {
 
 // == Program start ==
+    enum size {SIZE=16}; // 16 bytes
     // struct that will represent all memory structure
     typedef struct Memory {
-        int store_ints;
-        char store_chars;
+        int *store_ints;
+        char *store_chars;
     } Mem;
 
     // define 2 arrays (16 bytes each)
-    enum size {SIZE=16}; // 16 bytes
     int *arr_int = malloc(SIZE);
     char *arr_char = malloc(SIZE);
-    // initialize both arrays with 0 in all indexes
-    for (int i = 0; i < sizeof(arr_int); i++) {
+
+    // initialize both arrays with 0 and 'a' in all indexes
+    for (int i = 0; i < SIZE / sizeof(int); i++) {
         arr_int[i] = 0;
     }
-    for (int i = 0; i < sizeof(arr_char); i++) {
-         arr_char[i] = 0;
+    for (int i = 0; i < SIZE; i++) {
+        arr_char[i] = 0;
     }
-
-    Mem mem = {*arr_int, *arr_char}; // store the dinamic arrays in the struct.
     // memset(arr_int, 0, 16);
     // memset(arr_char, 0, 16);
+    Mem mem = {arr_int, arr_char}; // store the memory first byte in the struct.
+
 // =========================
 
     char task = define_task();
@@ -75,6 +76,15 @@ int main() {
 
     char type = define_datatype();
     printf("type in main: %c\n", type);
+
+    // verify if the arrays was filled with 0 in all bytes
+    for (int i = 0; i < 16; i++) {
+        printf("i %d: %d\n", i, mem.store_chars[i]);
+    }
+    printf("=======\n");
+    for (int i = 0; i < 4; i++) {
+        printf("i %d: %d\n", i, mem.store_ints[i]);
+    }
 
     return 0;
 }
