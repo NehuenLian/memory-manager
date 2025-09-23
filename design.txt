@@ -1,0 +1,28 @@
+Objective:
+In-memory data manager that can read, write, and modify data at the byte level.
+
+Persistence:
+.bin file
+
+Complete data:
+Struct of arrays, one array per data type.
+All bytes initialized to 0.
+
+For saving and reading:
+Cast to char (1 byte)
+
+Workflow:
+When starting, ask the user which operation they want to perform:
+
+Read
+Write
+
+Then, ask which data type they want to access:
+
+int
+char
+
+If int is chosen, ask for which element and position at that element (multiples of 4) and display it.
+If char is chosen, ask for which byte (position) and access it directly without multiples.
+
+Add additional functions to cast the two arrays to the opposite type.
