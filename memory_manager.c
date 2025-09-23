@@ -46,35 +46,36 @@ char define_datatype() {
 
 int main() {
 
-// == Program start ==
+// == Program startup ==
     enum size {SIZE=16}; // 16 bytes
+
     // struct that will represent all memory structure
     typedef struct Memory {
         int *store_ints;
         char *store_chars;
     } Mem;
 
-    // define 2 arrays (16 bytes each)
+    // define 2 memory type structures (16 bytes each)
     int *arr_int = malloc(SIZE);
     char *arr_char = malloc(SIZE);
 
-    // initialize both arrays with 0 and 'a' in all indexes
-    for (int i = 0; i < SIZE / sizeof(int); i++) {
+    // initialize both arrays with 0 in all indexes
+    for (int i = 0; i < 4; i++) { // runs 16 / sizeof(int) times
         arr_int[i] = 0;
     }
-    for (int i = 0; i < SIZE; i++) {
+    for (int i = 0; i < 16; i++) { // runs 16 times: bytes quantity for char
         arr_char[i] = 0;
     }
     // memset(arr_int, 0, 16);
     // memset(arr_char, 0, 16);
-    Mem mem = {arr_int, arr_char}; // store the memory first byte in the struct.
-
+    Mem mem = {arr_int, arr_char}; // store the memories first byte in the struct
 // =========================
 
     char task = define_task();
-    printf("task in main: %c\n", task);
-
     char type = define_datatype();
+
+    // debugging
+    printf("task in main: %c\n", task);
     printf("type in main: %c\n", type);
 
     // verify if the arrays was filled with 0 in all bytes
