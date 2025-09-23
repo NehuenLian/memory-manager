@@ -47,7 +47,6 @@ char define_datatype() {
 int main() {
 
 // == Program start ==
-    // TODO: Move to other function
     // struct that will represent all memory structure
     typedef struct Memory {
         int store_ints;
