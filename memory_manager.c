@@ -42,7 +42,7 @@ char define_task() {
     while (flag == 1) {
         printf("flag: %d\n", flag);
         printf("Define the task type you want to do --\nw: Write\nr: Read.\n");
-        scanf("%1s", &choosed_task);
+        scanf(" %c", &choosed_task);
 
         if (choosed_task == 'w' || choosed_task == 'r') {
             printf("Choosed task: %c", choosed_task);
@@ -64,7 +64,7 @@ char define_datatype() {
     while (flag == 1) {
         printf("flag: %d\n", flag);
         printf("Define datatype you want to access --\ni: int\nc: char\n");
-        scanf("%1s",  &choosed_type);
+        scanf(" %c",  &choosed_type);
 
         if (choosed_type == 'i' || choosed_type == 'c') {
             printf("Choosed type: %c", choosed_type);
@@ -84,7 +84,6 @@ int read_binary() { // READ FOR DEBBUGING
     FILE *binary = fopen("memory.bin", "rb");
 
     if (!binary) {
-        fclose(binary);
         perror("Cannot open the file");
         return 1;
     }
