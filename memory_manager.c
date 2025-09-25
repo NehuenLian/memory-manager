@@ -36,10 +36,10 @@ void startup_memory() {
 
 
 unsigned char* load_into_memory() {
-    FILE *binary = fopen("memory.bin", "rb");
+    FILE *file = fopen("memory.bin", "rb");
     static unsigned char volatile_memory[80];
 
-    if (!binary) {
+    if (!file) {
         perror("Cannot open the file");
         return NULL;
     }
@@ -47,32 +47,33 @@ unsigned char* load_into_memory() {
     unsigned char current_byte = 0;
     int i = 0;
 
-    while (fread(&current_byte, 1, 1, binary) == 1) {
+    while (fread(&current_byte, 1, 1, file) == 1) {
         printf("Current_byte: %d. (%d).\n", current_byte, i);
         volatile_memory[i] = current_byte;
         i++;
     }
+    fclose(file);
     return volatile_memory;
 }
 
 
 int read_binary() { // READ FOR DEBBUGING
-    FILE *binary = fopen("memory.bin", "rb");
+    FILE *file = fopen("memory.bin", "rb");
 
-    if (!binary) {
+    if (!file) {
         perror("Cannot open the file");
         return 1;
     }
 
     unsigned char byte = 0;
     int bytes_count = 0;
-    while(fread(&byte, 1, 1, binary) == 1) {
+    while(fread(&byte, 1, 1, file) == 1) {
         printf("%d\n", byte);
         bytes_count++;
     }
     printf("total bytes count: %d\n", bytes_count);
 
-    fclose(binary);
+    fclose(file);
     return 0;
 }
 
@@ -125,7 +126,7 @@ void read_char(unsigned char *memory) {
 
     printf("Select the memory index you want to read:\n");
     scanf("%d", &index);
-    if (index <= 80) {
+    if (index <= 79) {
         printf("Index selected: %d", memory[index]);
     }
     else {
@@ -136,9 +137,9 @@ void read_char(unsigned char *memory) {
 
 int main() {
 
-    FILE *memory = fopen("memory.bin", "r");
+    FILE *file = fopen("memory.bin", "r");
 
-    if (!memory) {
+    if (!file) {
         startup_memory();
     }
     else {
@@ -148,5 +149,6 @@ int main() {
         unsigned char *memory = load_into_memory();
         read_char(memory);
     }
+    fclose(file);
     return 0;
 }
