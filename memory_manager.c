@@ -145,6 +145,7 @@ int main() {
     else {
         char task = define_task();
         char type = define_datatype();
+        printf("%c, %c", task, type); // 
 
         unsigned char *memory = load_into_memory();
         read_char(memory);
