@@ -20,7 +20,7 @@ void startup_memory() {
     mem.stored_chars = malloc(SIZE);
 
     memset(mem.stored_ints, 0, SIZE * 4); 
-    memset(mem.stored_chars, 0, 16);
+    memset(mem.stored_chars, 'A', 16);
 
     // store bytes in the .bin file
     fwrite(mem.stored_ints, sizeof(int), 16, memory);
@@ -32,6 +32,48 @@ void startup_memory() {
     free(mem.stored_chars);
     mem.stored_ints = NULL;
     mem.stored_chars = NULL;
+}
+
+
+unsigned char* load_into_memory() {
+    FILE *binary = fopen("memory.bin", "rb");
+    static unsigned char volatile_memory[80];
+
+    if (!binary) {
+        perror("Cannot open the file");
+        return NULL;
+    }
+
+    unsigned char current_byte = 0;
+    int i = 0;
+
+    while (fread(&current_byte, 1, 1, binary) == 1) {
+        printf("Current_byte: %d. (%d).\n", current_byte, i);
+        volatile_memory[i] = current_byte;
+        i++;
+    }
+    return volatile_memory;
+}
+
+
+int read_binary() { // READ FOR DEBBUGING
+    FILE *binary = fopen("memory.bin", "rb");
+
+    if (!binary) {
+        perror("Cannot open the file");
+        return 1;
+    }
+
+    unsigned char byte = 0;
+    int bytes_count = 0;
+    while(fread(&byte, 1, 1, binary) == 1) {
+        printf("%d\n", byte);
+        bytes_count++;
+    }
+    printf("total bytes count: %d\n", bytes_count);
+
+    fclose(binary);
+    return 0;
 }
 
 
@@ -56,7 +98,6 @@ char define_task() {
     return choosed_task;
 }
 
-
 char define_datatype() {
     char choosed_type = 0;
     int flag = 1;
@@ -79,25 +120,17 @@ char define_datatype() {
 }
 
 
+void read_char(unsigned char *memory) {
+    int index = 0;
 
-int read_binary() { // READ FOR DEBBUGING
-    FILE *binary = fopen("memory.bin", "rb");
-
-    if (!binary) {
-        perror("Cannot open the file");
-        return 1;
+    printf("Select the memory index you want to read:\n");
+    scanf("%d", &index);
+    if (index <= 80) {
+        printf("Index selected: %d", memory[index]);
     }
-
-    unsigned char byte = 0;
-    int bytes_count = 0;
-    while(fread(&byte, 1, 1, binary) == 1) {
-        printf("%d\n", byte);
-        bytes_count++;
+    else {
+        printf("Error: out of index");
     }
-    printf("total bytes count: %d", bytes_count);
-
-    fclose(binary);
-    return 0;
 }
 
 
@@ -112,10 +145,8 @@ int main() {
         char task = define_task();
         char type = define_datatype();
 
-        // debugging
-        printf("task in main: %c\n", task);
-        printf("type in main: %c\n", type);
-        read_binary();
+        unsigned char *memory = load_into_memory();
+        read_char(memory);
     }
     return 0;
 }
