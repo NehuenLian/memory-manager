@@ -2,7 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-void startup_memory() {
+// ---------------------------------------
+// Memory management
+int startup_memory() {
 
     FILE *memory = fopen("memory.bin", "wb");
 
@@ -17,7 +19,16 @@ void startup_memory() {
     // define 2 memory type structures
     Mem mem;
     mem.stored_ints = malloc(SIZE * 4);
+    if (!mem.stored_ints) {
+        printf("Couldn't assign memory for ints.\n");
+        return 1;
+    }
+
     mem.stored_chars = malloc(SIZE);
+    if (!mem.stored_chars) {
+        printf("Couldn't assign memory for chars.\n");
+        return 1;
+    }
 
     memset(mem.stored_ints, 0, SIZE * 4); 
     memset(mem.stored_chars, 'A', 16);
@@ -48,7 +59,6 @@ unsigned char* load_into_memory() {
     int i = 0;
 
     while (fread(&current_byte, 1, 1, file) == 1) {
-        printf("Current_byte: %d. (%d).\n", current_byte, i);
         volatile_memory[i] = current_byte;
         i++;
     }
@@ -57,7 +67,28 @@ unsigned char* load_into_memory() {
 }
 
 
-int read_binary() { // READ FOR DEBBUGING
+int* divide_int_memory(unsigned char *full_memory) {
+
+    int *int_data = malloc(64);
+    if (!int_data) return NULL;
+    memcpy(int_data, &full_memory[0], sizeof(int) * 16);
+    
+    return int_data;
+}
+
+unsigned char* divide_char_memory(unsigned char *full_memory) {
+    unsigned char *char_data = malloc(16);
+    if (!char_data) return NULL;
+    memcpy(char_data, &full_memory[64], sizeof(char) * 16);
+
+    return char_data;
+}
+// ---------------------------------------
+
+
+// ---------------------------------------
+// Debugging
+int read_binary() {
     FILE *file = fopen("memory.bin", "rb");
 
     if (!file) {
@@ -71,24 +102,25 @@ int read_binary() { // READ FOR DEBBUGING
         printf("%d\n", byte);
         bytes_count++;
     }
-    printf("total bytes count: %d\n", bytes_count);
+    printf("Total bytes count: %d\n", bytes_count);
 
     fclose(file);
     return 0;
 }
+// ---------------------------------------
 
 
+// ---------------------------------------
+// User interaction
 char define_task() {
     char choosed_task;    
     int flag = 1;
 
     while (flag == 1) {
-        printf("flag: %d\n", flag);
         printf("Define the task type you want to do --\nw: Write\nr: Read.\n");
         scanf(" %c", &choosed_task);
 
         if (choosed_task == 'w' || choosed_task == 'r') {
-            printf("Choosed task: %c", choosed_task);
             flag = 0;
         }
         else {
@@ -104,35 +136,48 @@ char define_datatype() {
     int flag = 1;
 
     while (flag == 1) {
-        printf("flag: %d\n", flag);
         printf("Define datatype you want to access --\ni: int\nc: char\n");
         scanf(" %c",  &choosed_type);
 
         if (choosed_type == 'i' || choosed_type == 'c') {
-            printf("Choosed type: %c", choosed_type);
             flag = 0;
         }
         else {
-            printf("The type choosed doesn't exist.\n");
+            printf("The task choosed doesn't exist.\n");
             flag = 1; // flag set to 1 again so the sentinel loop stills running
         }
     }
     return choosed_type;
 }
+// ---------------------------------------
 
 
-void read_char(unsigned char *memory) {
+// ---------------------------------------
+// Reading data
+void read_int(int *int_bytes) {
     int index = 0;
 
-    printf("Select the memory index you want to read:\n");
+    printf("Select index you want to read for int:\n"); // int data available only from 0 to 63
     scanf("%d", &index);
-    if (index <= 79) {
-        printf("Index selected: %d", memory[index]);
+
+    if (index <= 15) {
+        printf("Your data: %d.\n", int_bytes[index]);
     }
-    else {
-        printf("Error: out of index");
-    }
+    else printf("Out of index.\n");
+
 }
+
+void read_char(unsigned char *char_bytes) {
+    int index = 0;
+    printf("Select index you want to read for char:\n"); // char data available only from 0 to 15
+    scanf("%d", &index);
+
+    if (index <= 15) {
+        printf("Your data: %d.\n", char_bytes[index]);
+    }
+    else printf("Out of index.\n");
+}
+// ---------------------------------------
 
 
 int main() {
@@ -142,14 +187,21 @@ int main() {
     if (!file) {
         startup_memory();
     }
-    else {
-        char task = define_task();
-        char type = define_datatype();
-        printf("%c, %c", task, type); // 
 
-        unsigned char *memory = load_into_memory();
-        read_char(memory);
+    char task = define_task();
+    char type = define_datatype();
+    unsigned char *full_memory = load_into_memory();
+
+    int *int_bytes = divide_int_memory(full_memory);
+    unsigned char *char_bytes = divide_char_memory(full_memory);
+
+    if (task == 'r' && type == 'i') {
+        read_int(int_bytes);
     }
+    if (task == 'r' && type == 'c') {
+        read_char(char_bytes);
+    }
+
     fclose(file);
     return 0;
 }
