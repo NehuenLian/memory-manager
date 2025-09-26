@@ -97,12 +97,10 @@ int update_memory(unsigned char *runtime_full_memory, int *int_bytes, unsigned c
         return 1;
     }
 
-    printf("int_bytes index 1: %d\n", int_bytes[1]); // muestra 40
+    memcpy(runtime_full_memory, &int_bytes[0], sizeof(int) * 16);
+    memcpy(runtime_full_memory + 64, &char_bytes[64], 16); // start to copy from index 64, otherwhise it will overwrite from 0 to 15
 
     // runtime_full_memory size = 80 bytes.
-    memcpy(runtime_full_memory, &int_bytes[0], sizeof(int) * 16);
-    memcpy(runtime_full_memory + 64, &char_bytes[64], 16);
-
     fwrite(runtime_full_memory, sizeof(char), 80, memory_file);
     fclose(memory_file);
 
