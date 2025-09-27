@@ -1,6 +1,8 @@
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 
-signed char* load_into_memory() {
+unsigned char* load_into_memory() {
     FILE *memory_file = fopen("memory.bin", "rb");
 
     if (!memory_file) {
