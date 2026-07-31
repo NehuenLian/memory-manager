@@ -79,7 +79,7 @@ memory_gestor/
 
 ## Building
 
-Compile with CMake:
+Compile using CMake:
 ```bash
 cd memory-manager
 cmake .
