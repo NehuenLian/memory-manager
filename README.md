@@ -79,8 +79,15 @@ memory_gestor/
 
 ## Building
 
+Compile with CMake:
+```bash
+cd memory-manager
+cmake .
+make
+```
+
 Compile using a C compiler:
 
 ```bash
-gcc main.c data_manipulation/data_access.c runtime_memory/manage_runtime_memory.c user_interaction/user_interaction.c -o memory_manager
+gcc main.c data_manipulation/data_access.c runtime_memory/manage_runtime_memory.c user_interaction/user_interaction.c -o gcc_manager
 ```
