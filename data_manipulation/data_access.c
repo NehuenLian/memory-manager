@@ -5,7 +5,7 @@ void read_int(int *int_bytes) {
     size_t index = 0;
 
     printf("Select index you want to read for int:\n");
-    scanf("%d", &index);
+    scanf("%zu", &index);
 
     if (index <= 15) {
         printf("Your data: %d.\n", int_bytes[index]);
@@ -17,7 +17,7 @@ void read_int(int *int_bytes) {
 void read_char(unsigned char *char_bytes) {
     size_t index = 0;
     printf("Select index you want to read for char:\n");
-    scanf("%d", &index);
+    scanf("%zu", &index);
 
     if (index <= 15) {
         printf("Your data: %d.\n", char_bytes[index]);
@@ -32,7 +32,7 @@ void read_char(unsigned char *char_bytes) {
 void modify_int(int *int_bytes) {
     size_t index = 0;
     printf("Select index you want to modify for int:\n");
-    scanf("%d", &index);
+    scanf("%zu", &index);
 
     if (index <= 15) {
         int new_value = 0;
@@ -48,7 +48,7 @@ void modify_int(int *int_bytes) {
 void modify_char(unsigned char *char_bytes) {
     size_t index = 0;
     printf("Select index you want to modify for char:\n");
-    scanf("%d", &index);
+    scanf("%zu", &index);
 
     if (index <= 15) {
         int new_value = 0;
