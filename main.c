@@ -9,7 +9,7 @@
 #define SIZE_FOR_CHARS 16
 #define SIZE_FOR_INTS 64
 
-// Memory startup if not exists
+// Startup memory if not exists
 int startup_memory() {
 
     FILE *memory_file = fopen("memory.bin", "wb");
@@ -18,7 +18,7 @@ int startup_memory() {
         return -1;
     }
 
-    // struct that will represent all memory structure
+    // struct that represents all memory structure
     typedef struct Memory {
         int *stored_ints;
         char *stored_chars;
@@ -38,7 +38,7 @@ int startup_memory() {
         return -1;
     }
 
-    memset(mem.stored_ints, 0, SIZE_FOR_INTS); 
+    memset(mem.stored_ints, 0, SIZE_FOR_INTS);
     memset(mem.stored_chars, 'A', 16);
 
     // store bytes in the .bin file
@@ -106,7 +106,7 @@ int main() {
     } else if (task == 'w' && type == 'i') {
         modify_int(int_bytes);
         update_memory(runtime_full_memory, int_bytes, char_bytes);
-        
+
     } else if (task == 'w' && type == 'c') {
         modify_char(char_bytes);
         update_memory(runtime_full_memory, int_bytes, char_bytes);

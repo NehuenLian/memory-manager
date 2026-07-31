@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 char define_task() {
-    char choosed_task;    
+    char choosed_task;
     int flag = 1;
 
     while (flag == 1) {
@@ -12,7 +12,7 @@ char define_task() {
             flag = 0;
         } else {
             printf("The task choosed doesn't exist.\n");
-            flag = 1; // flag set to 1 again so the sentinel loop stills running
+            flag = 1; // flag set to 1 again to ensure the sentinel loop will still be running
         }
     }
 
@@ -31,7 +31,7 @@ char define_datatype() {
             flag = 0;
         } else {
             printf("The task choosed doesn't exist.\n");
-            flag = 1; // flag set to 1 again so the sentinel loop stills running
+            flag = 1; // flag set to 1 again to ensure the sentinel loop will still be running
         }
     }
 
