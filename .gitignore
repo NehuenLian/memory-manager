@@ -1,3 +1,10 @@
 .vscode/
 *.exe
 *.bin
+
+# CMake
+__cmake_systeminformation
+CMakeFiles
+CMakeCache.txt
+cmake_install.cmake
+Makefile
